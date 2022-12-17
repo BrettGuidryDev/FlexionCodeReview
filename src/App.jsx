@@ -1,118 +1,139 @@
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
 import './App.css';
+import { tempConversion, volConversion } from './Conversions';
 
 function App() {
   const [count, setCount] = useState(0);
-  const [fromTemp, setFromTemp] = useState('');
-  const [toTemp, setToTemp] = useState('');
-  const [fromVol, setFromVol] = useState('');
-  const [toVol, setToVol] = useState('');
+  const [fromTemp, setFromTemp] = useState('Celsius');
+  const [toTemp, setToTemp] = useState('Fahrenheit');
+  const [fromVol, setFromVol] = useState('Liters');
+  const [toVol, setToVol] = useState('Gallons');
+  const [tempResult, settempResult] = useState('Check');
+  const [volResult, setvolResult] = useState('Check');
 
-  const temperature = ['Kelvin', 'Celsius', 'Fahrenheit', 'Rankine'];
-  const volume = [
-    'liters',
-    'tablespoons',
-    'cubic-inches',
-    'cups',
-    'cubic-feet',
-    'gallons',
-  ];
-  /*
-  display thoughts
-   - need front end for entering in data. simplest selection method between conversion units would be hilighted buttons
-  maybe dropdown but those would take longer more clicks per check
-
-  separate sections for temperature and volume
-  
-  States: 
-  convFromTemp
-    -tempKel
-    -tempCel
-    -tempFah
-    -tempRan
-  convToTemp
-  convFromVol
-    -volLit
-    -volTab
-    -volCubeInch
-    -volCubeFoot
-    -volGal
-  convToVol
-  */
-
-  // Rankine - Fahrenheit degree based. Begins at 0 like Kelvin
-  // Celsius to Fahrenheit = (x * 1.8) + 32
-  // Fahrenheit to Celsius = (x - 32) * (5/9)
-  // Kelvin to Rankine = (x * 1.8)
-  // Rankine to Kelvin = (x * (5/9))
-  // volumes between liters, tablespoons, cubic-inches, cups, cubic-feet, and gallons
-
-  /*
-  script logic: 
-   - two conversion scripts. each takes 4 args. arg1=num input, arg2=Student response, arg3=Unit type, arg4=Unit type
-   - create conversion table as object
-   - compare answer from conversion table to response
-   - edge case checks for non-int values in arg1, arg2
-  */
-  function tempSelect(x) {
-    const temperature = ['Kelvin', 'Celsius', 'Fahrenheit', 'Rankine'];
-    if (!temperature.includes(x)) return temperature[0];
-    if (x === temperature[0]) return temperature[1];
-    if (x === temperature[1]) return temperature[2];
-    if (x === temperature[2]) return temperature[3];
-    if (x === temperature[3]) return temperature[0];
+  // Verify function to make sure user is only inputting numbers
+  function validateInput(input) {
+    if (!input && input !== 0) return 'invalid input';
+    if (Number.isNaN(Number(input))) return 'invalid input';
+    return Number(Number(input).toFixed(2));
   }
 
-  function volumeSelect(x) {
-    const volume = [
-      'liters',
-      'tablespoons',
-      'cubic-inches',
-      'cups',
-      'cubic-feet',
-      'gallons',
-    ];
-    if (!volume.includes(x)) return volume[0];
-    if (x === volume[0]) return volume[1];
-    if (x === volume[1]) return volume[2];
-    if (x === volume[2]) return volume[3];
-    if (x === volume[3]) return volume[4];
-    if (x === volume[4]) return volume[5];
-    if (x === volume[5]) return volume[0];
+  // Finds and outputs the result of the temperature inputs
+  // pulls conversion data from objects in ./Conversions.js
+  function resultTemp() {
+    let trueResult;
+    let outputResult;
+    const temp1 = validateInput(document.querySelector('#fromTempInput').value);
+    const temp2 = validateInput(document.querySelector('#toTempInput').value);
+    if (typeof temp1 === 'number' && typeof temp2 === 'number') {
+      trueResult = tempConversion[fromTemp][toTemp](temp1).toFixed(2);
+      //console.log(trueResult);
+      if (Math.abs(trueResult - temp2) < Number.EPSILON) {
+        outputResult = 'Correct!';
+      } else {
+        outputResult = 'Incorrect';
+      }
+    } else {
+      outputResult = 'Invalid input';
+    }
+    settempResult((tempResult) => outputResult);
+  }
+
+  // Finds and outputs the result of the volume inputs
+  // pulls conversion data from objects in ./Conversions.js
+  function resultVol() {
+    let trueResult;
+    let outputResult;
+    const vol1 = validateInput(document.querySelector('#fromVolInput').value);
+    const vol2 = validateInput(document.querySelector('#toVolInput').value);
+    if (typeof vol1 === 'number' && typeof vol2 === 'number') {
+      trueResult = volConversion[fromVol][toVol](vol1).toFixed(2);
+      //console.log(trueResult);
+      if (Math.abs(trueResult - vol2) < Number.EPSILON) {
+        outputResult = 'Correct!';
+      } else {
+        outputResult = 'Incorrect';
+      }
+    } else {
+      outputResult = 'Invalid input';
+    }
+    setvolResult((volResult) => outputResult);
   }
 
   return (
     <div className='App'>
-      <div>
-        <a
-          href='https://github.com/BrettGuidryDev/FlexionCodeReview'
-          target='_blank'
-        >
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
+      <div></div>
       <h1>Flexion Code Review</h1>
-      <div className='card'>
-        Convert from
-        <button onClick={() => setFromTemp((fromTemp) => tempSelect(fromTemp))}>
-          {fromTemp}
-        </button>
-        <input placeholder={`initial temp in ${fromTemp}`} />
-        <p>
-          Convert to
-          <button onClick={() => setToTemp((toTemp) => tempSelect(toTemp))}>
-            {toTemp}
-          </button>
-          <input placeholder={`expected temp in ${toTemp}`} />
-        </p>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      {/* Temperature stuff */}
+      <div id='tempatureDiv' className='card'>
+        Convert
+        <input id='fromTempInput' placeholder={`degrees ${fromTemp}`} />
+        <span className='selectDiv'>
+          <select defaultValue={fromTemp}>
+            <option value='Kelvin'>Kelvin</option>
+            <option value='Celsius'>Celsius</option>
+            <option value='Fahrenheit'>Fahrenheit</option>
+            <option value='Rankine'>Rankine</option>
+          </select>
+        </span>
+        <div id='convertToTemp'>
+          To
+          <input id='toTempInput' placeholder={`expected temp in ${toTemp}`} />
+          <span className='selectDiv'>
+            <select defaultValue={toTemp}>
+              <option value='Kelvin'>Kelvin</option>
+              <option value='Celsius'>Celsius</option>
+              <option value='Fahrenheit'>Fahrenheit</option>
+              <option value='Rankine'>Rankine</option>
+            </select>
+          </span>
+          <p>
+            <button onClick={resultTemp}>{tempResult}</button>
+          </p>
+        </div>
       </div>
-      <p className='read-the-docs'>
-        Click on the Vite and React logos to learn more
-      </p>
+
+      {/* volume stuff */}
+      <div id='volumeDiv' className='card'>
+        Convert
+        <input
+          id='fromVolInput'
+          type='text'
+          placeholder={`initial volume in ${fromVol}`}
+        />
+        <span className='selectDiv'>
+          <select defaultValue={fromVol}>
+            <option value='Cubic-inches'>Cubic-inches</option>
+            <option value='Cubic-feet'>Cubic-feet</option>
+            <option value='Cups'>Cups</option>
+            <option value='Gallons'>Gallons</option>
+            <option value='Liters'>Liters</option>
+            <option value='Tablespoons'>Tablespoons</option>
+          </select>
+        </span>
+        <div id='convertToVol'>
+          to
+          <input
+            id='toVolInput'
+            type='text'
+            placeholder={`expected volume in ${toVol}`}
+          />
+          <span className='selectDiv'>
+            <select defaultValue={toVol}>
+              <option value='Cubic-inches'>Cubic-inches</option>
+              <option value='Cubic-feet'>Cubic-feet</option>
+              <option value='Cups'>Cups</option>
+              <option value='Gallons'>Gallons</option>
+              <option value='Liters'>Liters</option>
+              <option value='Tablespoons'>Tablespoons</option>
+            </select>
+          </span>
+          <p>
+            <button onClick={resultVol}>{volResult}</button>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
