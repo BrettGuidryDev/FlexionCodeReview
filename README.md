@@ -24,6 +24,7 @@ Units of volume are consistent with US volume measures
 1 US tablespoon === .5 fluid ounces
 
 List of further development tasks:
+Add unit testing (jest, Mocha, etc)
 Clean up the front end styling
 Change color palate for better visibilty
 Improve dropdown menues with additional styling
