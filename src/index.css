@@ -57,7 +57,6 @@ button {
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
-  
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -92,10 +91,12 @@ input:focus{
 
 select{
   appearance: none;
+  text-align-last:center; 
   background-color: var(--inputColor);
   padding: .7em;
   border: 0px solid transparent;
   border-radius: 7px;
+  margin: 0px;
 }
 
 select:hover{
@@ -111,7 +112,9 @@ select:focus, select:active{
   border-radius: 7px;
 }
 
-
+#toTempInput, #toVolInput{
+  width: 15.5em;
+}
 
 
 

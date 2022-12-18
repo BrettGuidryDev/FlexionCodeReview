@@ -68,7 +68,7 @@ function App() {
       {/* Temperature stuff */}
       <div id='tempatureDiv' className='card'>
         Convert
-        <input id='fromTempInput' placeholder={`degrees ${fromTemp}`} />
+        <input id='fromTempInput' placeholder={`Degrees ${fromTemp}`} />
         <span className='selectDiv'>
           <select defaultValue={fromTemp}>
             <option value='Kelvin'>Kelvin</option>
@@ -79,7 +79,7 @@ function App() {
         </span>
         <div id='convertToTemp'>
           To
-          <input id='toTempInput' placeholder={`expected temp in ${toTemp}`} />
+          <input id='toTempInput' placeholder={`Expected temp in ${toTemp}`} />
           <span className='selectDiv'>
             <select defaultValue={toTemp}>
               <option value='Kelvin'>Kelvin</option>
@@ -88,10 +88,10 @@ function App() {
               <option value='Rankine'>Rankine</option>
             </select>
           </span>
+        </div>
           <p>
             <button onClick={resultTemp}>{tempResult}</button>
           </p>
-        </div>
       </div>
 
       {/* volume stuff */}
@@ -100,7 +100,7 @@ function App() {
         <input
           id='fromVolInput'
           type='text'
-          placeholder={`initial volume in ${fromVol}`}
+          placeholder={`Volume in ${fromVol}`}
         />
         <span className='selectDiv'>
           <select defaultValue={fromVol}>
@@ -117,7 +117,7 @@ function App() {
           <input
             id='toVolInput'
             type='text'
-            placeholder={`expected volume in ${toVol}`}
+            placeholder={`Expected volume in ${toVol}`}
           />
           <span className='selectDiv'>
             <select defaultValue={toVol}>
