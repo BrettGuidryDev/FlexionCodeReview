@@ -1,30 +1,27 @@
-
-
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-  
+
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-  
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  
+
   --bgColor: rgba(197, 200, 201, 0.562);
-  --inputColor:#5a5f5f18;
+  --inputColor: #5a5f5f18;
   --inputFocusColor: rgba(89, 91, 92, 0.055);
   --textColor: ;
   --hoverColor: #708aa0;
-  --shadow: inset .06em .1em .7em .05em var(--hoverColor);
+  --shadow: inset 0.06em 0.1em 0.7em 0.05em var(--hoverColor);
   /* box-shadow: inset 0 1px 2px #4780af67, 0 -1px 1px #FFF, 0 1px 0 #FFF; */
 }
-
 
 a {
   font-weight: 500;
@@ -62,62 +59,60 @@ button {
 }
 button:hover {
   border-color: #646cff;
-
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-input{
+input {
   border: 0px solid transparent;
   border-radius: 7px;
-  padding: .7em;
-  margin: .5em;
+  padding: 0.7em;
+  margin: 0.5em;
   background-color: var(--inputColor);
 }
 
-input:focus{
+input:focus {
   outline: none !important;
   border: 0px solid var(--hoverColor);
   box-shadow: var(--shadow);
   background: var(--inputFocusColor);
 }
 
-.selectDiv{
+.selectDiv {
   border-radius: 7px;
   overflow: hidden;
 }
 
-select{
+select {
   appearance: none;
-  text-align-last:center; 
+  text-align-last: center;
   background-color: var(--inputColor);
-  padding: .7em;
+  padding: 0.7em;
   border: 0px solid transparent;
   border-radius: 7px;
   margin: 0px;
 }
 
-select:hover{
+select:hover {
   border: 0px solid #646cff;
   box-shadow: var(--shadow);
-  transition: .25s;
+  transition: 0.25s;
 }
 
-select:focus, select:active{ 
+select:focus,
+select:active {
   appearance: none;
-  outline:none;
+  outline: none;
   background-color: var(--inputFocusColor);
   border-radius: 7px;
 }
 
-#toTempInput, #toVolInput{
+#toTempInput,
+#toVolInput {
   width: 15.5em;
 }
-
-
-
 
 @media (prefers-color-scheme: light) {
   :root {
