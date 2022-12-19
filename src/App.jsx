@@ -26,8 +26,9 @@ function App() {
   }
 
   // Finds and outputs the result of the temperature inputs
-  // Pulls conversion data from objects in ./Conversions.js
+  // Pulls conversion data from object in ./Conversions.js
   // Runs user input through validateInput() then through conversion objects
+  // No return but updates the state of tempResult
   function resultTemp() {
     let trueResult;
     let outputResult;
@@ -35,13 +36,7 @@ function App() {
     const temp2 = validateInput(toTempRef.current.value);
     if (typeof temp1 === 'number' && typeof temp2 === 'number') {
       trueResult = Number(unitConversion[fromTemp][toTemp](temp1).toFixed(2));
-      console.log(
-        'TRUERESULT',
-        trueResult,
-        typeof trueResult,
-        fromTemp,
-        toTemp
-      );
+      //console.log('TRUERESULTTemp', trueResult, typeof trueResult, fromTemp, toTemp);
       if (Math.abs(trueResult - temp2) < Number.EPSILON) {
         outputResult = 'Correct!';
       } else {
@@ -54,7 +49,9 @@ function App() {
   }
 
   // Finds and outputs the result of the volume inputs
-  // pulls conversion data from objects in ./Conversions.js
+  // pulls conversion data from object in ./Conversions.js
+  // Runs user input through validateInput() then through conversion objects
+  // No return but updates the state of volResult
   function resultVol() {
     let trueResult;
     let outputResult;
@@ -62,7 +59,7 @@ function App() {
     const vol2 = validateInput(toVolRef.current.value);
     if (typeof vol1 === 'number' && typeof vol2 === 'number') {
       trueResult = Number(unitConversion[fromVol][toVol](vol1).toFixed(2));
-      //console.log(trueResult);
+      //console.log('TRUERESULTVol', trueResult);
       if (Math.abs(trueResult - vol2) < Number.EPSILON) {
         outputResult = 'Correct!';
       } else {
@@ -80,18 +77,11 @@ function App() {
       <h1>Flexion Code Review</h1>
 
       {/* Temperature stuff */}
-      <div id='tempatureDiv' className='card'>
+      <div id='temperatureDiv' className='card'>
         Convert
-        <input
-          id='fromTempInput'
-          ref={fromTempRef}
-          placeholder={`Degrees ${fromTemp}`}
-        />
+        <input id='fromTempInput' ref={fromTempRef} placeholder={`Degrees ${fromTemp}`}/>
         <span className='selectDiv'>
-          <select
-            defaultValue={fromTemp}
-            onChange={(e) => setFromTemp(e.target.value)}
-          >
+          <select defaultValue={fromTemp} onChange={(e) => setFromTemp(e.target.value)}>
             <option value='Kelvin'>Kelvin</option>
             <option value='Celsius'>Celsius</option>
             <option value='Fahrenheit'>Fahrenheit</option>
@@ -100,16 +90,9 @@ function App() {
         </span>
         <div id='convertToTemp'>
           To
-          <input
-            id='toTempInput'
-            ref={toTempRef}
-            placeholder={`Expected temp in ${toTemp}`}
-          />
-          <span
-            className='selectDiv'
-            onChange={(e) => setToTemp(e.target.value)}
-          >
-            <select defaultValue={toTemp}>
+          <input id='toTempInput' ref={toTempRef} placeholder={`Expected temp in ${toTemp}`}/>
+          <span className='selectDiv'>
+            <select defaultValue={toTemp} onChange={(e) => setToTemp(e.target.value)}>
               <option value='Kelvin'>Kelvin</option>
               <option value='Celsius'>Celsius</option>
               <option value='Fahrenheit'>Fahrenheit</option>
@@ -125,17 +108,9 @@ function App() {
       {/* volume stuff */}
       <div id='volumeDiv' className='card'>
         Convert
-        <input
-          id='fromVolInput'
-          type='text'
-          ref={fromVolRef}
-          placeholder={`Volume in ${fromVol}`}
-        />
+        <input id='fromVolInput' type='text' ref={fromVolRef} placeholder={`Volume in ${fromVol}`}/>
         <span className='selectDiv'>
-          <select
-            defaultValue={fromVol}
-            onChange={(e) => setFromVol(e.target.value)}
-          >
+          <select defaultValue={fromVol} onChange={(e) => setFromVol(e.target.value)} >
             <option value='Cubic-inches'>Cubic-inches</option>
             <option value='Cubic-feet'>Cubic-feet</option>
             <option value='Cups'>Cups</option>
@@ -146,12 +121,7 @@ function App() {
         </span>
         <div id='convertToVol'>
           to
-          <input
-            id='toVolInput'
-            type='text'
-            ref={toVolRef}
-            placeholder={`Expected volume in ${toVol}`}
-          />
+          <input id='toVolInput' type='text' ref={toVolRef} placeholder={`Expected volume in ${toVol}`}/>
           <span className='selectDiv'>
             <select defaultValue={toVol} onChange={(e) => setToVol(e.target.value)}>
               <option value='Cubic-inches'>Cubic-inches</option>
