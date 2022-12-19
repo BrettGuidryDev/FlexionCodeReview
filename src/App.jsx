@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { unitConversion } from './Conversions';
 import './App.css';
-import { tempConversion, volConversion } from './Conversions';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -10,24 +10,38 @@ function App() {
   const [toVol, setToVol] = useState('Gallons');
   const [tempResult, settempResult] = useState('Check');
   const [volResult, setvolResult] = useState('Check');
+  const fromTempRef = useRef(null);
+  const toTempRef = useRef(null);
+  const fromVolRef = useRef(null);
+  const toVolRef = useRef(null);
 
   // Verify function to make sure user is only inputting numbers
+  // data comes in from the two result[Functions] below as String
+  // data returns as Number
   function validateInput(input) {
-    if (!input && input !== 0) return 'invalid input';
+    //console.log('Input', input, typeof input);
+    if (!input) return 'invalid input';
     if (Number.isNaN(Number(input))) return 'invalid input';
     return Number(Number(input).toFixed(2));
   }
 
   // Finds and outputs the result of the temperature inputs
-  // pulls conversion data from objects in ./Conversions.js
+  // Pulls conversion data from objects in ./Conversions.js
+  // Runs user input through validateInput() then through conversion objects
   function resultTemp() {
     let trueResult;
     let outputResult;
-    const temp1 = validateInput(document.querySelector('#fromTempInput').value);
-    const temp2 = validateInput(document.querySelector('#toTempInput').value);
+    const temp1 = validateInput(fromTempRef.current.value);
+    const temp2 = validateInput(toTempRef.current.value);
     if (typeof temp1 === 'number' && typeof temp2 === 'number') {
-      trueResult = tempConversion[fromTemp][toTemp](temp1).toFixed(2);
-      //console.log(trueResult);
+      trueResult = Number(unitConversion[fromTemp][toTemp](temp1).toFixed(2));
+      console.log(
+        'TRUERESULT',
+        trueResult,
+        typeof trueResult,
+        fromTemp,
+        toTemp
+      );
       if (Math.abs(trueResult - temp2) < Number.EPSILON) {
         outputResult = 'Correct!';
       } else {
@@ -44,10 +58,10 @@ function App() {
   function resultVol() {
     let trueResult;
     let outputResult;
-    const vol1 = validateInput(document.querySelector('#fromVolInput').value);
-    const vol2 = validateInput(document.querySelector('#toVolInput').value);
+    const vol1 = validateInput(fromVolRef.current.value);
+    const vol2 = validateInput(toVolRef.current.value);
     if (typeof vol1 === 'number' && typeof vol2 === 'number') {
-      trueResult = volConversion[fromVol][toVol](vol1).toFixed(2);
+      trueResult = Number(unitConversion[fromVol][toVol](vol1).toFixed(2));
       //console.log(trueResult);
       if (Math.abs(trueResult - vol2) < Number.EPSILON) {
         outputResult = 'Correct!';
@@ -68,9 +82,16 @@ function App() {
       {/* Temperature stuff */}
       <div id='tempatureDiv' className='card'>
         Convert
-        <input id='fromTempInput' placeholder={`Degrees ${fromTemp}`} />
+        <input
+          id='fromTempInput'
+          ref={fromTempRef}
+          placeholder={`Degrees ${fromTemp}`}
+        />
         <span className='selectDiv'>
-          <select defaultValue={fromTemp}>
+          <select
+            defaultValue={fromTemp}
+            onChange={(e) => setFromTemp(e.target.value)}
+          >
             <option value='Kelvin'>Kelvin</option>
             <option value='Celsius'>Celsius</option>
             <option value='Fahrenheit'>Fahrenheit</option>
@@ -79,8 +100,15 @@ function App() {
         </span>
         <div id='convertToTemp'>
           To
-          <input id='toTempInput' placeholder={`Expected temp in ${toTemp}`} />
-          <span className='selectDiv'>
+          <input
+            id='toTempInput'
+            ref={toTempRef}
+            placeholder={`Expected temp in ${toTemp}`}
+          />
+          <span
+            className='selectDiv'
+            onChange={(e) => setToTemp(e.target.value)}
+          >
             <select defaultValue={toTemp}>
               <option value='Kelvin'>Kelvin</option>
               <option value='Celsius'>Celsius</option>
@@ -89,9 +117,9 @@ function App() {
             </select>
           </span>
         </div>
-          <p>
-            <button onClick={resultTemp}>{tempResult}</button>
-          </p>
+        <p>
+          <button onClick={resultTemp}>{tempResult}</button>
+        </p>
       </div>
 
       {/* volume stuff */}
@@ -100,10 +128,14 @@ function App() {
         <input
           id='fromVolInput'
           type='text'
+          ref={fromVolRef}
           placeholder={`Volume in ${fromVol}`}
         />
         <span className='selectDiv'>
-          <select defaultValue={fromVol}>
+          <select
+            defaultValue={fromVol}
+            onChange={(e) => setFromVol(e.target.value)}
+          >
             <option value='Cubic-inches'>Cubic-inches</option>
             <option value='Cubic-feet'>Cubic-feet</option>
             <option value='Cups'>Cups</option>
@@ -117,10 +149,11 @@ function App() {
           <input
             id='toVolInput'
             type='text'
+            ref={toVolRef}
             placeholder={`Expected volume in ${toVol}`}
           />
           <span className='selectDiv'>
-            <select defaultValue={toVol}>
+            <select defaultValue={toVol} onChange={(e) => setToVol(e.target.value)}>
               <option value='Cubic-inches'>Cubic-inches</option>
               <option value='Cubic-feet'>Cubic-feet</option>
               <option value='Cups'>Cups</option>
