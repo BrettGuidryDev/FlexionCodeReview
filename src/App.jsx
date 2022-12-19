@@ -8,8 +8,8 @@ function App() {
   const [toTemp, setToTemp] = useState('Fahrenheit');
   const [fromVol, setFromVol] = useState('Liters');
   const [toVol, setToVol] = useState('Gallons');
-  const [tempResult, settempResult] = useState('Check');
-  const [volResult, setvolResult] = useState('Check');
+  const [tempResult, setTempResult] = useState('Check');
+  const [volResult, setVolResult] = useState('Check');
   const fromTempRef = useRef(null);
   const toTempRef = useRef(null);
   const fromVolRef = useRef(null);
@@ -25,19 +25,27 @@ function App() {
     return Number(Number(input).toFixed(2));
   }
 
-  // Finds and outputs the result of the temperature inputs
-  // Pulls conversion data from object in ./Conversions.js
+  // Data goes in as string
+  // Gets passed param:String from buttons that is used to determine which state hooks to update
   // Runs user input through validateInput() then through conversion objects
-  // No return but updates the state of tempResult
-  function resultTemp() {
+  // Pulls conversion data from object in ./Conversions.js
+  // No return but updates result state 
+  function conversionResult(type) {
     let trueResult;
     let outputResult;
-    const temp1 = validateInput(fromTempRef.current.value);
-    const temp2 = validateInput(toTempRef.current.value);
-    if (typeof temp1 === 'number' && typeof temp2 === 'number') {
-      trueResult = Number(unitConversion[fromTemp][toTemp](temp1).toFixed(2));
-      //console.log('TRUERESULTTemp', trueResult, typeof trueResult, fromTemp, toTemp);
-      if (Math.abs(trueResult - temp2) < Number.EPSILON) {
+    let input1;
+    let input2;
+    if (type === 't') input1 = validateInput(fromTempRef.current.value);
+    if (type === 't') input2 = validateInput(toTempRef.current.value);
+    if (type === 'v') input1 = validateInput(fromVolRef.current.value);
+    if (type === 'v') input2 = validateInput(toVolRef.current.value);
+
+    if (typeof input1 === 'number' && typeof input2 === 'number') {
+      if (type === 't') trueResult = Number(unitConversion[fromTemp][toTemp](input1).toFixed(2));
+      if (type === 'v') trueResult = Number(unitConversion[fromVol][toVol](input1).toFixed(2));
+      
+      //console.log('TRUERESULT', type, trueResult, typeof trueResult, input1, input2);
+      if (Math.abs(trueResult - input2) < Number.EPSILON) {
         outputResult = 'Correct!';
       } else {
         outputResult = 'Incorrect';
@@ -45,38 +53,17 @@ function App() {
     } else {
       outputResult = 'Invalid input';
     }
-    settempResult((tempResult) => outputResult);
+   if (type === 't') setTempResult((tempResult) => outputResult);
+   if (type === 'v') setVolResult((tempResult) => outputResult);
   }
 
-  // Finds and outputs the result of the volume inputs
-  // pulls conversion data from object in ./Conversions.js
-  // Runs user input through validateInput() then through conversion objects
-  // No return but updates the state of volResult
-  function resultVol() {
-    let trueResult;
-    let outputResult;
-    const vol1 = validateInput(fromVolRef.current.value);
-    const vol2 = validateInput(toVolRef.current.value);
-    if (typeof vol1 === 'number' && typeof vol2 === 'number') {
-      trueResult = Number(unitConversion[fromVol][toVol](vol1).toFixed(2));
-      //console.log('TRUERESULTVol', trueResult);
-      if (Math.abs(trueResult - vol2) < Number.EPSILON) {
-        outputResult = 'Correct!';
-      } else {
-        outputResult = 'Incorrect';
-      }
-    } else {
-      outputResult = 'Invalid input';
-    }
-    setvolResult((volResult) => outputResult);
-  }
 
   return (
     <div className='App'>
       <div></div>
       <h1>Flexion Code Review</h1>
 
-      {/* Temperature stuff */}
+      {/* Temperature stuff: button sends 't' to conversionResult() function for it to determine the state to update*/}
       <div id='temperatureDiv' className='card'>
         Convert
         <input id='fromTempInput' ref={fromTempRef} placeholder={`Degrees ${fromTemp}`}/>
@@ -101,11 +88,11 @@ function App() {
           </span>
         </div>
         <p>
-          <button onClick={resultTemp}>{tempResult}</button>
+          <button onClick={() => conversionResult('t')}>{tempResult}</button>
         </p>
       </div>
 
-      {/* volume stuff */}
+      {/* volume stuff: button sends 'v' to conversionResult() function for it to determine the state to update*/}
       <div id='volumeDiv' className='card'>
         Convert
         <input id='fromVolInput' type='text' ref={fromVolRef} placeholder={`Volume in ${fromVol}`}/>
@@ -133,7 +120,7 @@ function App() {
             </select>
           </span>
           <p>
-            <button onClick={resultVol}>{volResult}</button>
+            <button onClick={() => conversionResult('v')}>{volResult}</button>
           </p>
         </div>
       </div>
