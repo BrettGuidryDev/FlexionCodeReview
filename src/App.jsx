@@ -35,11 +35,14 @@ function App() {
     let outputResult;
     let input1;
     let input2;
-    if (type === 't') input1 = validateInput(fromTempRef.current.value);
-    if (type === 't') input2 = validateInput(toTempRef.current.value);
-    if (type === 'v') input1 = validateInput(fromVolRef.current.value);
-    if (type === 'v') input2 = validateInput(toVolRef.current.value);
-
+    if (type === 't') {
+      input1 = validateInput(fromTempRef.current.value);
+      input2 = validateInput(toTempRef.current.value);
+    }
+    if (type === 'v') {
+      input1 = validateInput(fromVolRef.current.value);
+      input2 = validateInput(toVolRef.current.value);
+    }
     if (typeof input1 === 'number' && typeof input2 === 'number') {
       if (type === 't') trueResult = Number(unitConversion[fromTemp][toTemp](input1).toFixed(2));
       if (type === 'v') trueResult = Number(unitConversion[fromVol][toVol](input1).toFixed(2));
