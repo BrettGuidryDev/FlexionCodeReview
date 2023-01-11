@@ -1,6 +1,6 @@
 # FlexionCodeReview
 
-Flexion assessment
+Sample assessment
 
 To start up this web app
 Clone the repo from https://github.com/BrettGuidryDev/FlexionCodeReview.git

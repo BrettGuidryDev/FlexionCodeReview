@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
-import { unitConversion } from './Conversions';
+import { conversionResult } from './functions/Functions';
+import { unitConversion } from './data/Conversions';
 import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0);
   const [fromTemp, setFromTemp] = useState('Celsius');
   const [toTemp, setToTemp] = useState('Fahrenheit');
   const [fromVol, setFromVol] = useState('Liters');
@@ -15,58 +15,28 @@ function App() {
   const fromVolRef = useRef(null);
   const toVolRef = useRef(null);
 
-  // Verify function to make sure user is only inputting numbers
-  // data comes in from the two result[Functions] below as String
-  // data returns as Number
-  function validateInput(input) {
-    //console.log('Input', input, typeof input);
-    if (!input) return 'invalid input';
-    if (Number.isNaN(Number(input))) return 'invalid input';
-    return Number(Number(input).toFixed(2));
-  }
+  
 
-  // Data goes in as string
-  // Gets passed param:String from buttons that is used to determine which state hooks to update
-  // Runs user input through validateInput() then through conversion objects
-  // Pulls conversion data from object in ./Conversions.js
-  // No return but updates result state 
-  function conversionResult(type) {
-    let trueResult;
-    let outputResult;
-    let input1;
-    let input2;
-    if (type === 't') {
-      input1 = validateInput(fromTempRef.current.value);
-      input2 = validateInput(toTempRef.current.value);
-    }
-    if (type === 'v') {
-      input1 = validateInput(fromVolRef.current.value);
-      input2 = validateInput(toVolRef.current.value);
-    }
-    if (typeof input1 === 'number' && typeof input2 === 'number') {
-      if (type === 't') trueResult = Number(unitConversion[fromTemp][toTemp](input1).toFixed(2));
-      if (type === 'v') trueResult = Number(unitConversion[fromVol][toVol](input1).toFixed(2));
-      
-      //console.log('TRUERESULT', type, trueResult, typeof trueResult, input1, input2);
-      if (Math.abs(trueResult - input2) < Number.EPSILON) {
-        outputResult = 'Correct!';
-      } else {
-        outputResult = 'Incorrect';
-      }
-    } else {
-      outputResult = 'Invalid input';
-    }
-   if (type === 't') setTempResult((tempResult) => outputResult);
-   if (type === 'v') setVolResult((tempResult) => outputResult);
+  function handleClick(type){
+    if (type === 't') setTempResult(conversionResult(unitConversion[fromTemp][toTemp],
+      fromTempRef.current.value,
+      toTempRef.current.value
+    )); 
+    if (type === 'v') setVolResult(conversionResult(unitConversion[fromVol][toVol],
+      fromVolRef.current.value,
+      toVolRef.current.value 
+      )); 
   }
 
 
   return (
     <div className='App'>
-      <div></div>
-      <h1>Flexion Code Review</h1>
+      <h1>Sample Code Review</h1>
 
-      {/* Temperature stuff: button sends 't' to conversionResult() function for it to determine the state to update*/}
+      {/* Conversion stuff: button sends 't' for temperature conversions and 'v' for volume 
+        to handleClick() function for it to determine the state to update
+        and pass along the conversion parameters required by conversionResult()
+      */}
       <div id='temperatureDiv' className='card'>
         Convert
         <input id='fromTempInput' ref={fromTempRef} placeholder={`Degrees ${fromTemp}`}/>
@@ -91,11 +61,10 @@ function App() {
           </span>
         </div>
         <p>
-          <button onClick={() => conversionResult('t')}>{tempResult}</button>
+          <button onClick={() => handleClick('t')}>{tempResult}</button>
         </p>
       </div>
 
-      {/* volume stuff: button sends 'v' to conversionResult() function for it to determine the state to update*/}
       <div id='volumeDiv' className='card'>
         Convert
         <input id='fromVolInput' type='text' ref={fromVolRef} placeholder={`Volume in ${fromVol}`}/>
@@ -123,7 +92,7 @@ function App() {
             </select>
           </span>
           <p>
-            <button onClick={() => conversionResult('v')}>{volResult}</button>
+            <button onClick={() => handleClick('v')}>{volResult}</button>
           </p>
         </div>
       </div>
