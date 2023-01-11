@@ -4,7 +4,8 @@ Sample assessment
 
 To start up this web app
 Clone the repo from https://github.com/BrettGuidryDev/FlexionCodeReview.git
-cd into the directory created for this repo and run 'npm run dev'
+    - cd into the directory created for this repo and run 'npm install'
+    - Then run 'npm run dev'
 
 This project was set up with Vite so the server port can be configured in the vite.config.js. Currently it's set to 3000
 
